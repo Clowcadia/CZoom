@@ -25,7 +25,6 @@ winSetup()
 	Gui, PnCfgMain: Add, Button, % "y+" magWinSide " gactivate Default ", OK 
 
 	WinGet, pnCfgMainID, ID, PaneConfigMain
-	
 	WinGet pnCfgMainID, ID, PaneConfigMain
 	Gui, PnCfgSrc: -Border -Caption
 	
@@ -68,12 +67,13 @@ activate()
 		GetKeyState, state, LButton
 		if state = D
 		{
+			;zoomAct--
 			break
 		}
 	}
 }
 
-GuiClose()
+PnCfgMainGuiClose()
 {
 	ExitApp
 }
