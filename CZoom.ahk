@@ -12,7 +12,7 @@ global zoomAct := 1
 
 InputBox, winName,, Please Enter The Window Title
 winSetup()
-;activate()
+activate(zoomAct)
 ;a::activate()
 
 winSetup()
@@ -24,7 +24,7 @@ winSetup()
 	
 	Gui, PnCfgMain: Show, % "x" 0 " y" 0 " w" magWinSide " h" magWinSide + 400, PaneConfigMain
 		
-	Gui, PnCfgMain: Add, Button, % "y+" magWinSide " gactivate Default ", OK 
+	Gui, PnCfgMain: Add, Button, % "y+" magWinSide " gactivate vzoomAct Default ", OK 
 
 	WinGet, pnCfgMainID, ID, PaneConfigMain
 	
@@ -48,15 +48,20 @@ activate()
 	zoom := 16
 	zSide := magWinSide / zoom
 	
-	Loop
+	while zoomAct
 	{
 		MouseGetPos, x, y
 		x -= zSide/2
 		y -= zSide/2
+		If (x=x_old) && (y=y_old)
+			Continue
+		x_old:=x, y_old:=y
+		
 		StretchBlt(destPrintFrame, 0, 0, magWinSide, magWinSide, srcPrintFrame, x, y, zSide, zSide, 0xCC0020)
 			
 		crshDIBS := CreateDIBSection(magWinSide, magWinSide)
-		crshRegObj := SelectObject(destPrintFrame, crshDIBS)tFrame)
+		crshRegObj := SelectObject(destPrintFrame, crshDIBS)
+		destGpxDCP := Gdip_GraphicsFromHDC(destPrintFrame)
 		pen1 := Gdip_CreatePen(0x660000ff, 10)
 				
 		Gdip_DrawLine(destGpxDCP, pen1, 0, magWinSide/2, magWinSide, magWinSide/2)
@@ -66,7 +71,7 @@ activate()
 		if state = D
 		{
 			zoomAct--
-			return
+			break
 		}
 	}
 }
