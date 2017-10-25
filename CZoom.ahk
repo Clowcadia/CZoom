@@ -8,12 +8,10 @@ pToken := Gdip_Startup()
 
 global magWinSide := 256, winName, winX, winY, winW, winH
 global srcPrintFrame, destPrintFrame, destFullFrame
-global zoomAct := 1
 
 InputBox, winName,, Please Enter The Window Title
 winSetup()
-activate(zoomAct)
-;a::activate()
+activate()
 
 winSetup()
 {	
@@ -24,7 +22,7 @@ winSetup()
 	
 	Gui, PnCfgMain: Show, % "x" 0 " y" 0 " w" magWinSide " h" magWinSide + 400, PaneConfigMain
 		
-	Gui, PnCfgMain: Add, Button, % "y+" magWinSide " gactivate vzoomAct Default ", OK 
+	Gui, PnCfgMain: Add, Button, % "y+" magWinSide " gactivate Default ", OK 
 
 	WinGet, pnCfgMainID, ID, PaneConfigMain
 	
@@ -48,7 +46,7 @@ activate()
 	zoom := 16
 	zSide := magWinSide / zoom
 	
-	while zoomAct
+	Loop
 	{
 		MouseGetPos, x, y
 		x -= zSide/2
@@ -70,7 +68,6 @@ activate()
 		GetKeyState, state, LButton
 		if state = D
 		{
-			zoomAct--
 			break
 		}
 	}
