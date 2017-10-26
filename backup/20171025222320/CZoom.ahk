@@ -70,11 +70,11 @@ activate()
 		if state = D
 		{
 			rectDIBS := CreateDIBSection(100, 100)
-			rectRegObj := SelectObject(winW, winH)
+			rectRegObj := SelectObject(destFullFrame, rectDIBS)
 			rectGpxDCP := Gdip_GraphicsFromHDC(destFullFrame)
-			pen2 := Gdip_CreatePen(0x660000ff, 5)
+			pen2 := Gdip_CreatePen(0x660000ff, 10)
 			
-			Gdip_DrawRectangle(rectGpxDCP,pen2,x,y,99,99)
+			Gdip_DrawRectangle(rectGpxDCP,pen2,0,0,99,99)
 			
 			break
 		}

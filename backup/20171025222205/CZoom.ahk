@@ -64,17 +64,19 @@ activate()
 		pen1 := Gdip_CreatePen(0x660000ff, 10)
 		
 		Gdip_DrawLine(destGpxDCP, pen1, 0, magWinSide/2, magWinSide, magWinSide/2)
-		Gdip_DrawLine(destGpxDCP, pen1, magWinSide/2, 0, magWinSide/2, magWinSide)		
+		Gdip_DrawLine(destGpxDCP, pen1, magWinSide/2, 0, magWinSide/2, magWinSide)
+		
+		rectDIBS := CreateDIBSection(100, 100)
+		rectRegObj := SelectObject(destFullFrame, rectDIBS)
+		rectGpxDCP := Gdip_GraphicsFromHDC(destFullFrame)
+		pen2 := Gdip_CreatePen(0x660000ff, 10)
+		
+		Gdip_DrawRectangle(rectGpxDCP,pen2,0,0,99,99)
+		
 		
 		GetKeyState, state, LButton
 		if state = D
 		{
-			rectDIBS := CreateDIBSection(100, 100)
-			rectRegObj := SelectObject(winW, winH)
-			rectGpxDCP := Gdip_GraphicsFromHDC(destFullFrame)
-			pen2 := Gdip_CreatePen(0x660000ff, 5)
-			
-			Gdip_DrawRectangle(rectGpxDCP,pen2,x,y,99,99)
 			
 			break
 		}

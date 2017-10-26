@@ -72,7 +72,7 @@ activate()
 			rectDIBS := CreateDIBSection(100, 100)
 			rectRegObj := SelectObject(winW, winH)
 			rectGpxDCP := Gdip_GraphicsFromHDC(destFullFrame)
-			pen2 := Gdip_CreatePen(0x660000ff, 5)
+			pen2 := Gdip_CreatePen(0x660000ff, 1)
 			
 			Gdip_DrawRectangle(rectGpxDCP,pen2,x,y,99,99)
 			
