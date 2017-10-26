@@ -43,20 +43,6 @@ getSelXY(){
 	activate(, , x, y)
 }
 
-drawSel(rectX, rectY){
-	Loop{
-		MouseGetPos, x, y		
-		If (x=x_old) && (y=y_old)
-			Continue
-		x_old:=x, y_old:=y
-		
-		
-		if GetKeyState("LButton", "D")
-		{
-			break
-		}
-	}
-}
 
 activate(ByRef selX:=0, ByRef selY:=0, ByRef rectX:=0, ByRef rectY:=0)
 {
