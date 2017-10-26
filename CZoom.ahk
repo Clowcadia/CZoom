@@ -18,19 +18,13 @@ winSetup()
 	WinGet, prnSrcID, ID, % winName
 	WinGetPos, winX, winY, winW, winH, % winName
 	
-	Gui, PnCfgMain: +AlwaysOnTop 
-	
+	Gui, PnCfgMain: +AlwaysOnTop +hwndpnCfgMainID
 	Gui, PnCfgMain: Show, % "x" 0 " y" 0 " w" magWinSide " h" magWinSide + 400, PaneConfigMain
 	
-	Gui, PnCfgMain: Add, Button, % "y+" magWinSide " gactivate Default ", OK 
+	Gui, PnCfgMain: Add, Button, % "y+" magWinSide " ggetSelXY Default ", OK 
 	
-	WinGet, pnCfgMainID, ID, PaneConfigMain
-	WinGet pnCfgMainID, ID, PaneConfigMain
-	Gui, PnCfgSrc: -Border -Caption
-	
+	Gui, PnCfgSrc: -Border -Caption +hwndpnCfgSrcID	
 	Gui, PnCfgSrc: Show , % "w" winW " h" winH " x" 0 " y" 0, PaneConfigSource
-	
-	WinGet pnCfgSrcID, ID, PaneConfigSource
 	
 	srcPrintFrame := GetDC(prnSrcID)
 	destPrintFrame := GetDC(pnCfgMainID)
@@ -41,7 +35,30 @@ winSetup()
 	
 }
 
-activate()
+getSelXY(){
+	activate(x, y)
+	;MsgBox % x ", " y
+	Sleep 1000
+	;drawSel(x, y)
+	activate(, , x, y)
+}
+
+drawSel(rectX, rectY){
+	Loop{
+		MouseGetPos, x, y		
+		If (x=x_old) && (y=y_old)
+			Continue
+		x_old:=x, y_old:=y
+		
+		
+		if GetKeyState("LButton", "D")
+		{
+			break
+		}
+	}
+}
+
+activate(ByRef selX:=0, ByRef selY:=0, ByRef rectX:=0, ByRef rectY:=0)
 {
 	zoom := 16
 	zSide := magWinSide / zoom
@@ -49,14 +66,17 @@ activate()
 	Loop
 	{
 		MouseGetPos, x, y
-		x -= zSide/2
-		y -= zSide/2
-		
 		If (x=x_old) && (y=y_old)
 			Continue
 		x_old:=x, y_old:=y
 		
-		StretchBlt(destPrintFrame, 0, 0, magWinSide, magWinSide, srcPrintFrame, x, y, zSide, zSide, 0xCC0020)
+		curX := x - zSide/2
+		curY := y - zSide/2
+		;MsgBox % curX ", " curY
+		
+		
+		
+		StretchBlt(destPrintFrame, 0, 0, magWinSide, magWinSide, destFullFrame, curX, curY, zSide, zSide, 0xCC0020)
 		
 		crshDIBS := CreateDIBSection(magWinSide, magWinSide)
 		crshRegObj := SelectObject(destPrintFrame, crshDIBS)
@@ -66,16 +86,21 @@ activate()
 		Gdip_DrawLine(destGpxDCP, pen1, 0, magWinSide/2, magWinSide, magWinSide/2)
 		Gdip_DrawLine(destGpxDCP, pen1, magWinSide/2, 0, magWinSide/2, magWinSide)		
 		
-		GetKeyState, state, LButton
-		if state = D
-		{
-			rectDIBS := CreateDIBSection(100, 100)
+		if rectX && rectY{
+			StretchBlt(destFullFrame, 0, 0, winW, winH, srcPrintFrame, 0, 0, winW, winH, 0xCC0020)
+			
+			rectDIBS := CreateDIBSection(winW, winH)
 			rectRegObj := SelectObject(winW, winH)
 			rectGpxDCP := Gdip_GraphicsFromHDC(destFullFrame)
-			pen2 := Gdip_CreatePen(0x660000ff, 5)
-			
-			Gdip_DrawRectangle(rectGpxDCP,pen2,x,y,99,99)
-			
+			pen2 := Gdip_CreatePen(0x660000ff, 1)
+			Gdip_DrawRectangle(rectGpxDCP, pen2, rectX, rectY, x-rectX, y-rectY)
+		}
+		
+		
+		if GetKeyState("LButton", "D")
+		{
+			selX := x
+			selY := y
 			break
 		}
 	}
