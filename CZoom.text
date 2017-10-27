@@ -1,2 +1,2 @@
 1
-Rectangle semi-functional (not drawn through whole frame), activate updated
+CHanged GDIP to a class and renamed Gdip_getDC/releaseDC to getDCP/releaseDCP
