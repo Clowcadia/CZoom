@@ -1,2 +1,2 @@
 1
-CHanged GDIP to a class and renamed Gdip_getDC/releaseDC to getDCP/releaseDCP
+Functions are now in the library folder
